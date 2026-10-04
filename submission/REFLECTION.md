@@ -1,0 +1,5 @@
+- Trong số các Lakehouse anti-patterns, em quan tâm nhất đến "Small-file problem". Khi xây dựng các pipeline phân tích log sự kiện e-commerce hay xử lý dòng dữ liệu thời gian thực qua Apache Kafka, hệ thống bắt buộc phải ghi dữ liệu liên tục theo các micro-batch để đảm bảo độ trễ thấp. Nếu thiếu quy trình bảo trì, hệ thống sẽ nhanh chóng rải rác hàng trăm ngàn file Parquet dung lượng rất nhỏ lên storage. Hậu quả là chi phí I/O object storage tăng phi mã, và engine bị thắt cổ chai ở khâu đọc metadata trước khi kịp xử lý dữ liệu thực tế.
+
+- Để phòng tránh, kiến trúc dữ liệu cần tách bạch rõ ràng giữa luồng ghi (Write Path) và luồng đọc (Read Path). Việc thiết lập các lịch trình tự động chạy ngầm các lệnh OPTIMIZE (Compaction) để gộp file nhỏ và VACUUM để dọn rác là tác vụ bắt buộc. Quá trình này giúp duy trì kích thước file mục tiêu ổn định ở mức 128-512MB, tối ưu hóa triệt để Data Skipping khi truy vấn.
+
+- Khai báo sử dụng AI: Trong quá trình hoàn thiện bài lab, em có sử dụng công cụ AI (Gemini) để hỗ trợ phân tích luồng thực thi mã nguồn và định dạng cú pháp Markdown.
